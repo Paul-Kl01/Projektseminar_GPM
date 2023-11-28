@@ -1,0 +1,7 @@
+version: '3.9'
+
+services:
+  ui_backend:
+    build: ./ui_backend
+    ports:
+      - "8080:80" 
