@@ -12,6 +12,8 @@ api_variablen = {
     "mowas": "/mowas/mapData"
 }
 
+columns = ['ID', 'Urgency','Area', 'Titel', 'Event', 'Datum']
+
 # NINA Api URLs 
 ninaBaseUrl = "https://warnung.bund.de/api31"
 ninaWarningsUrl = "https://nina.api.proxy.bund.dev/api31/warnings/"
@@ -25,7 +27,7 @@ def get_api_warning(meldung):
 def get_api_details(warning):
     n = 0
     response = get_api_warning(warning)
-    df = pd.DataFrame(columns=['Urgency','Area', 'Titel', 'Event', 'Datum'])
+    df = pd.DataFrame(columns=columns)
 
     for responses in response:
         id = responses["id"]
@@ -38,7 +40,7 @@ def get_api_details(warning):
         d = datetime.fromisoformat(start).astimezone(timezone.utc)
         d.strftime('%Y-%m-%d %H:%M:')
         time = d.replace(tzinfo=None)
-        df.loc[n] = [urgency, area, meldungsText, warnung, time]
+        df.loc[n] = [id, urgency, area, meldungsText, warnung, time]
         n = n+1
     return df
 
@@ -47,7 +49,7 @@ def df_to_csv(data, filename):
     data.to_csv(filename+'.csv') 
  
 # Dataframe definieren    
-df3 = pd.DataFrame(columns=['Urgency','Area', 'Titel', 'Event', 'Datum']) 
+df3 = pd.DataFrame(columns=columns) 
 
 # API abfragen für alle NINA Variablen
 for x in api_variablen:
