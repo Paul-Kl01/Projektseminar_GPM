@@ -9,3 +9,20 @@ git checkout -b <name_branch> <br>
 git add . <br>
 git commit -m "<commit_message>"<br>
 git push origin <branch_name> <br>
+
+## Frontend starten
+
+in VSCode Terminal eingeben <br>
+
+npm install <br>
+
+und danach: <br>
+
+npm run dev <br>
+
+## Backend starten
+
+Strg + F5
+
+
+
