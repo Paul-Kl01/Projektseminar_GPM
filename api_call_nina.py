@@ -1,7 +1,9 @@
+## Imports ## 
 import requests
 import pandas as pd
 from datetime import datetime
 from datetime import timezone
+## Imports ## 
 
 ## Api Variablen für NINA
 api_variablen = {
@@ -12,6 +14,7 @@ api_variablen = {
     "mowas": "/mowas/mapData"
 }
 
+# Dataframe Collumns definieren  
 columns = ['ID', 'Urgency','Area', 'Titel', 'Event', 'Datum']
 
 # NINA Api URLs 
@@ -23,12 +26,12 @@ def get_api_warning(meldung):
   response = requests.get(ninaBaseUrl+meldung+".json")
   return response.json()
 
-# Details zu NINA Warning abfragen 
+# Details zu NINA Warning abfragen: Return DataFrame mit allen Ergebnissen 
 def get_api_details(warning):
     n = 0
     response = get_api_warning(warning)
     df = pd.DataFrame(columns=columns)
-
+    # GetDetails for warning 
     for responses in response:
         id = responses["id"]
         warningDetails = requests.get(ninaWarningsUrl+id+".json").json() 
@@ -49,16 +52,19 @@ def df_to_csv(data, filename):
     data.to_csv(filename+'.csv') 
  
 # Dataframe definieren    
-df3 = pd.DataFrame(columns=columns) 
+data = pd.DataFrame(columns=columns) 
 
-# API abfragen für alle NINA Variablen
+## API abfragen für alle NINA Variablen/Warnings ##
 for x in api_variablen:
     data_api = get_api_details(api_variablen[x])
-    df3 = pd.concat([df3, data_api])
+    data = pd.concat([data, data_api])
 
 # API Daten in CSV speichern 
-df_to_csv(df3, "Data")
-print(df3)
+df_to_csv(data, "Data")
+
+# DataFrame ausgeben
+print(data)
+
 
 
 
