@@ -54,31 +54,22 @@ def df_to_csv(data, filename):
 # Dataframe definieren    
 data = pd.DataFrame(columns=columns) 
 
-
 ## API abfragen für alle NINA Variablen/Warnings ##
 for x in api_variablen:
     data_api = get_api_details(api_variablen[x])
     data = pd.concat([data, data_api])
+    print(data)
 
-# Orte herausfiltern und an Ende hängen  
-dataArea = data.Area.str.split(",", expand=True)
-data = pd.concat([data, dataArea], axis=1)
-data = data.drop('Area', axis=1)
-
-length_from_column = (len(data[data.columns[5:]]))
-print(length_from_column)
-
-for zahl in range(length_from_column): 
-    print(zahl)
-    data.rename(columns={zahl: 'area'}, inplace=True)
+# DataFrame df2 erstellen
+data['Area'] = data['Area'].str.split(', ')
+df2 = data.explode('Area')
+print(df2)
 
 # API Daten in CSV speichern 
-df_to_csv(data, "Data")
+df_to_csv(df2, "Data")
 
 # DataFrame ausgeben
-print(data)
-
-
+print(df2)
 
 
 
