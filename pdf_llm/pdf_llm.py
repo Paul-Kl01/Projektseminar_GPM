@@ -54,8 +54,7 @@ def get_conversation_chain(vectorstore):
         memory=memory
     )
     return conversation_chain
-
-conversation = None
+#conversation = None
 def handle_userinput(user_question):
     response = conversation({'question': user_question})
     chat_history = response['chat_history']
@@ -94,3 +93,5 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+# Ablauf: pdf in embeddings -> in vectorstore (FAISS)-> vectorestore mit vorherigen Kontext wird dann ausgewertet von einem anderen llm
