@@ -6,6 +6,11 @@ from langchain.document_loaders import DirectoryLoader, PyPDFLoader
 import os
 from PyPDF2 import PdfReader
 from langchain.chains import RetrievalQAWithSourcesChain
+from langchain.memory import ConversationBufferMemory
+from langchain.chains import ConversationalRetrievalChain
+#from htmlTemplates import css, bot_template, user_template
+from langchain.llms import HuggingFaceHub
+from dotenv import load_dotenv
 ###########
 #pip install faiss-cpu
 #pip install langchain
@@ -42,55 +47,54 @@ def get_text_chunks(text):
     chunks = text_splitter.split_text(text)
     return chunks
 
-<<<<<<< HEAD
+def get_vectorstore_and_store(text_chunks):
+    embeddings = HuggingFaceInstructEmbeddings(model_name="hkunlp/instructor-xl")
+    # Initiate Faiss DB
+    ##########################vectorstoreDB = FAISS.from_texts(texts=text_chunks, embedding=embeddings)##############
+    ###
+    ### --> danach soll das PDF-Verzeichnis gelöscht werden, bzw. Datein verschieben, weil beim nächsten Upload 
+    ###
+    # Verzeichnis in dem die VektorDB gespeichert werden soll
+    save_directory = "Store"
+    vectorstoreDB.save_local(save_directory)
+    vectorstoreDB = FAISS.load_local(save_directory, embeddings)
+    return vectorstoreDB
+
+########
+
 def get_conversation_chain(vectorstore):
     #llm = ChatOpenAI()
     llm = HuggingFaceHub(repo_id="google/flan-t5-xxl", model_kwargs={"temperature":0.5, "max_length":512})
 
     memory = ConversationBufferMemory(memory_key='chat_history', return_messages=True)
+    memory.save_context({"input": "hi"}, {"output": "whats up"})
     conversation_chain = ConversationalRetrievalChain.from_llm(
         llm=llm,
         retriever=vectorstore.as_retriever(),
         memory=memory
     )
     return conversation_chain
-=======
->>>>>>> f7a4156d1ef1d3593483c04f1c7095609adf83ea
 
-# Aufruf
-load_dotenv()
-
-folder_path = './PDFs'
-#text_content = get_pdf_text(folder_path)
-#print(text_content.replace('\n', ' '))
-pdf_text = get_pdf_text(folder_path)
-text_chunks = get_text_chunks(pdf_text)
-# embeddings
-embeddings = HuggingFaceInstructEmbeddings(model_name="hkunlp/instructor-xl")
-
-# Initiate Faiss DB
-vectorstoreDB = FAISS.from_texts(texts=text_chunks, embedding=embeddings)
-### --> danach soll das PDF-Verzeichnis gelöscht werden, bzw. Datein verschieben, weil beim nächsten Upload 
-# Verzeichnis in dem die VektorDB gespeichert werden soll
-save_directory = "Store"
-vectorstoreDB.save_local(save_directory)
-vectorstoreDB = FAISS.load_local(save_directory)
-
-print(get_conversation_chain(vectorstoreDB))
-
-### Similarity-Check mit LLM
-<<<<<<< HEAD
-#query = "Stell"
-#docs = vectorstoreDB.similarity_search_with_score(query)
-=======
-#query = "ell"
-#docs = vectorstoreDB.similarity_search(query)
->>>>>>> f7a4156d1ef1d3593483c04f1c7095609adf83ea
-#print(docs)
+def handle_userinput(user_question):
+    response = conversation({'question': user_question})
+    chat_history = response['chat_history']
 
 
-#### Frage und Antwort mit LLM
-#retriever = vectorstoreDB.as_retriever()
-#model = RetrievalQAWithSourcesChain.from_chain_type(llm=)
+
+def main():
+    load_dotenv()
+    user_question = "Wie lautet deine Frage?"
+    folder_path = './PDFs'
+    pdf_text = get_pdf_text(folder_path)
+    text_chunks = get_text_chunks(pdf_text)
+    vectorstoreDB = get_vectorstore_and_store(text_chunks)
+    #save_directory = "Store"
+    #vectorstoreDB = FAISS.load_local(save_directory, embeddings)
+
+    print(get_conversation_chain(vectorstoreDB))
 
 
+
+
+if __name__ == '__main__':
+    main()
