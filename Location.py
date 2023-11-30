@@ -57,33 +57,26 @@ class Location:
             df.loc[0] = [self.location, post_sub]
             
             if post_sub.isdigit(): 
-                print("isdigt")
                 return df
             else: 
-                print("exception")
                 raise Exception 
         except: 
-            print("in exc")
             # Dataframe PLZ durchsuchen
             gesuchter_wert = self.location
             ergebnisse = self.df[self.df['plz_name'] == gesuchter_wert]
-            print(ergebnisse)
             
             if ergebnisse.empty:
-                print("nicht gefunden")
                 gesuchter_wert_erw = gesuchter_wert+ " "
                 ergebnisse = self.df[self.df['plz_name'].str.contains(gesuchter_wert_erw)]
-                print(ergebnisse)
                 
                 if ergebnisse.empty:
                    neue_zeile = {'plz_name': "", 'name': ''}
                    ergebnisse = ergebnisse.append(neue_zeile, ignore_index=True)
-                   print(ergebnisse)
                    return ergebnisse 
-            
+            #print(ergebnisse)
             return ergebnisse
             
 
 ## Testing 
-l1 = Location("Unterwössen").getPostalCode()
-
+#l1 = Location("Schliersee").getPostalCode()
+#print(type(l1))

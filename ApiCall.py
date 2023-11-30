@@ -12,7 +12,7 @@ class ApiCall:
             #"hochwasser": "/lhp/mapData",
             #"polizei": "/police/mapData",
             "wetter": "/dwd/mapData"
-            #"katwarn": "/katwarn/mapData",
+           # "katwarn": "/katwarn/mapData",
             #"mowas": "/mowas/mapData"
         }
 
@@ -66,30 +66,24 @@ class ApiCall:
         df2 = data.explode('Area')
         
         # Neue Zeile mit Plz erstellen
-        
         def berechnung_func(row):
             loca = row['Area']
             ort = loca.replace("Gemeinde", "")
             location = Location(ort.strip()).getPostalCode()
-            
             plz = location.iloc[0]['name']
-            print(plz)
             
             return plz
 
         df2['Plz'] = df2.apply(berechnung_func, axis=1)
         
-
-        # DataFrame ausgeben
-        print(df2) 
-        
         # API Daten in CSV speichern 
         df_to_csv(df2, "Data")
 
+        # Return 
         return df2
 
 # Testing    
-l1 = ApiCall().getData()
+#l1 = ApiCall().getData()
 
 
 
