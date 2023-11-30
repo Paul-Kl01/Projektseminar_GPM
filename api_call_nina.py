@@ -3,16 +3,17 @@ import requests
 import pandas as pd
 from datetime import datetime
 from datetime import timezone
+from Location import *
 
 class ApiCall: 
     def getData(self):
         ## Api Variablen für NINA
         api_variablen = {
-            "hochwasser": "/lhp/mapData",
-            "polizei": "/police/mapData",
-            "wetter": "/dwd/mapData",
-            "katwarn": "/katwarn/mapData",
-            "mowas": "/mowas/mapData"
+            #"hochwasser": "/lhp/mapData",
+            #"polizei": "/police/mapData",
+            "wetter": "/dwd/mapData"
+            #"katwarn": "/katwarn/mapData",
+            #"mowas": "/mowas/mapData"
         }
 
         # Dataframe Collumns definieren  
@@ -63,19 +64,32 @@ class ApiCall:
         # DataFrame df2 erstellen
         data['Area'] = data['Area'].str.split(', ')
         df2 = data.explode('Area')
+        
+        # Neue Zeile mit Plz erstellen
+        
+        def berechnung_func(row):
+            loca = row['Area']
+            ort = loca.replace("Gemeinde", "")
+            location = Location(ort.strip()).getPostalCode()
+            
+            plz = location.iloc[0]['name']
+            print(plz)
+            
+            return plz
 
-        # API Daten in CSV speichern 
-        df_to_csv(df2, "Data")
+        df2['Plz'] = df2.apply(berechnung_func, axis=1)
+        
 
         # DataFrame ausgeben
         print(df2) 
         
-        # Return 
+        # API Daten in CSV speichern 
+        df_to_csv(df2, "Data")
+
         return df2
 
 # Testing    
-l1 = ApiCall()
-l1.getData()
+l1 = ApiCall().getData()
 
 
 
