@@ -42,6 +42,7 @@ def get_text_chunks(text):
     chunks = text_splitter.split_text(text)
     return chunks
 
+<<<<<<< HEAD
 def get_conversation_chain(vectorstore):
     #llm = ChatOpenAI()
     llm = HuggingFaceHub(repo_id="google/flan-t5-xxl", model_kwargs={"temperature":0.5, "max_length":512})
@@ -53,6 +54,8 @@ def get_conversation_chain(vectorstore):
         memory=memory
     )
     return conversation_chain
+=======
+>>>>>>> f7a4156d1ef1d3593483c04f1c7095609adf83ea
 
 # Aufruf
 load_dotenv()
@@ -76,8 +79,13 @@ vectorstoreDB = FAISS.load_local(save_directory)
 print(get_conversation_chain(vectorstoreDB))
 
 ### Similarity-Check mit LLM
+<<<<<<< HEAD
 #query = "Stell"
 #docs = vectorstoreDB.similarity_search_with_score(query)
+=======
+#query = "ell"
+#docs = vectorstoreDB.similarity_search(query)
+>>>>>>> f7a4156d1ef1d3593483c04f1c7095609adf83ea
 #print(docs)
 
 
