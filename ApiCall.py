@@ -9,11 +9,11 @@ class ApiCall:
     def getData(self):
         ## Api Variablen für NINA
         api_variablen = {
-            #"hochwasser": "/lhp/mapData",
-            #"polizei": "/police/mapData",
-            "wetter": "/dwd/mapData"
-            #"katwarn": "/katwarn/mapData",
-            #"mowas": "/mowas/mapData"
+            "hochwasser": "/lhp/mapData",
+            "polizei": "/police/mapData",
+            "wetter": "/dwd/mapData",
+            "katwarn": "/katwarn/mapData",
+            "mowas": "/mowas/mapData"
         }
 
         # Dataframe Collumns definieren  
