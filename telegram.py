@@ -10,7 +10,11 @@ from Warning import *
 
 with open("token.txt") as file:
     token = file.read()
+    
 bot = AsyncTeleBot(token)
+
+gesuchte_zeile = Warning()
+
 
 # Handle '/start' and '/help'
 @bot.message_handler(commands=['help', 'start'])
@@ -26,10 +30,10 @@ async def get_Message(message):
     print(frage)
     
     # Warnung für genannten Ort abfragen 
-    gesuchte_zeile = Warning(frage).getWarningOrt()
+    antw = gesuchte_zeile.getWarningOrt(frage)
     
     # Bot Repy mit Warnung 
-    await bot.reply_to(message, gesuchte_zeile)
+    await bot.reply_to(message, antw)
 
 asyncio.run(bot.polling())
 

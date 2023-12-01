@@ -73,13 +73,13 @@ class Location:
                    neue_zeile = pd.Series({'plz_name': "", 'name': ''})
                    #ergebnisse = ergebnisse.append(neue_zeile, ignore_index=True)
                    ergebnisse = pd.concat([neue_zeile, ergebnisse], ignore_index=True)
-                   ergebnisse = ergebnisse.drop(1)
-                   
+                   #ergebnisse = ergebnisse.drop(1)
+                   #print(ergebnisse)
                    return ergebnisse 
             #print(ergebnisse)
             return ergebnisse
             
 
 ## Testing 
-#l1 = Location("Schliersee").getPostalCode()
+#l1 = Location("Wartenberg").getPostalCode()
 #print(type(l1))
