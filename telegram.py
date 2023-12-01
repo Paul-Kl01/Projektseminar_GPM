@@ -25,20 +25,14 @@ async def get_Message(message):
     frage = message.text
     print(frage)
     
-    # GetLocation von Nutzereingabe 
-    plz = Warning(frage)
-    plz2 = plz.compare()
-    plz2 = plz2.iloc[0]['name']
-    print(plz2)
+    # Warnung für genannten Ort abfragen 
+    gesuchte_zeile = Warning(frage).getWarningOrt()
     
-    data = plz.cleanWarnings()
-    print(data)
-
-    gesuchte_zeile = data.loc[data['Plz'] == plz2]
-    
+    # Bot Repy mit Warnung 
     await bot.reply_to(message, gesuchte_zeile)
 
 asyncio.run(bot.polling())
+
 
 
 
