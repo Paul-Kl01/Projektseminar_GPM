@@ -16,35 +16,39 @@ bot = AsyncTeleBot(token)
 @bot.message_handler(commands=['start'])
 async def handle_start(message):
     #print(message)
-    button_wetter = types.InlineKeyboardButton('Aktuelle Meldungen zum Wetter', callback_data='wetter')
-    button_hochwasser = types.InlineKeyboardButton('Aktuelle Meldungen zu Hochwasser', callback_data='hochwasser')
-    button_polizei = types.InlineKeyboardButton('Aktuelle Meldungen der Polizei', callback_data='polizei')
-    button_katwarn = types.InlineKeyboardButton('Aktuelle Meldungen bei Katwarn', callback_data='katwarn')
-    button_mowas = types.InlineKeyboardButton('ktuelle Meldungen bei MoWaS', callback_data='mowas')
+    button_akt_Meldung = types.InlineKeyboardButton('Aktuelle Meldungen zum Wetter', callback_data='akt_Meldung')
     button_allg = types.InlineKeyboardButton('Allgemeine Informationen zum Katastrophenschutz', callback_data='allg')
 
     keyboard = types.InlineKeyboardMarkup()
     keyboard.add(button_allg)
-    keyboard.add(button_wetter)
-    keyboard.add(button_hochwasser)
-    keyboard.add(button_polizei)
-    keyboard.add(button_katwarn)
-    keyboard.add(button_mowas)
 
     await bot.reply_to(message, text='Keyboard example', reply_markup=keyboard)
 
 @bot.callback_query_handler(func=lambda call: True)
 async def handle_button_click(call):
-    if call.data == 'allg':
-        # Hier wird die Funktion aufgerufen, die du mit Button 1 verknüpfen möchtest
-        await function_allg(call.message)
-    else :
-        # Hier wird die Funktion aufgerufen, die du mit Button 2 verknüpfen möchtest
-        await bot.send_message(call.message.chat.id, "Du möchtest etwas anderes.")
+    match call.data:
+        case "allg":
+            # Hier wird die Funktion aufgerufen, die du mit Button 1 verknüpfen möchtest
+            await function_allg(call.message)
+        case "akt_Meldung":
+            # Hier wird die Funktion aufgerufen, die du mit Button 1 verknüpfen möchtest
+            await function_akt_meldungen(call.message)
+
+        case _:
+            # Hier wird die Funktion aufgerufen, die du mit Button 2 verknüpfen möchtest
+            await bot.send_message(call.message.chat.id, "Der Button ist nicht angebunden.")
 
 
 async def function_allg(message):
-    await bot.send_message(message.chat.id, "Du möchtest allgemeine Informationen")
+    # hier bitte den Zaubereipart einsenden
+    antwort = "Du möchtest allgemeine Informationen"
+    await bot.send_message(message, antwort)
+
+async def function_akt_meldungen(message):
+    # hier bitte Pauls abfrage einfügen
+    antwort = "Du möchtest Wetter Informationen"
+    await bot.send_message(message, antwort)
+
 # Handle '/start' and '/help'
 # @bot.message_handler(commands=['help', 'start'])
 # async def send_welcome(message):
