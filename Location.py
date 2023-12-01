@@ -70,8 +70,11 @@ class Location:
                 ergebnisse = self.df[self.df['plz_name'].str.contains(gesuchter_wert_erw)]
                 
                 if ergebnisse.empty:
-                   neue_zeile = {'plz_name': "", 'name': ''}
-                   ergebnisse = ergebnisse.append(neue_zeile, ignore_index=True)
+                   neue_zeile = pd.Series({'plz_name': "", 'name': ''})
+                   #ergebnisse = ergebnisse.append(neue_zeile, ignore_index=True)
+                   ergebnisse = pd.concat([neue_zeile, ergebnisse], ignore_index=True)
+                   ergebnisse = ergebnisse.drop(1)
+                   
                    return ergebnisse 
             #print(ergebnisse)
             return ergebnisse
