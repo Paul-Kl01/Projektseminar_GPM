@@ -83,7 +83,7 @@ class ApiCall:
         return df2
 
 # Testing    
-#l1 = ApiCall().getData()
+print(ApiCall().getData())
 
 
 
