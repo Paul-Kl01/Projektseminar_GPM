@@ -56,14 +56,13 @@ class Warning:
             fehler = "Es gibt keine Warnung"
             return fehler
         else:
-            wert_als_string = gesuchte_zeile.iloc[0].to_string(index=False)
+            wert_als_string = gesuchte_zeile.iloc[0]
             print("in schleife")
-            return wert_als_string
+            return wert_als_string['Titel']
         
     
 ## Testing Waring 
 
 # plz = Warning("Rottach-Egern")
 # gesuchte_zeile = plz.getWarningOrt()
-
 # print(gesuchte_zeile)
