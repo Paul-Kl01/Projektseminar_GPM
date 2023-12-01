@@ -72,35 +72,22 @@ def get_vectorstore():
     return vectorstoreDB
 
 
-def get_conversation_chain(vectorstore):
-    llm = HuggingFaceHub(repo_id="google/flan-t5-xxl", model_kwargs={"temperature":0.5, "max_length":512})
-
-    memory = ConversationBufferMemory(memory_key='chat_history', return_messages=True)
-    #memory.save_context({"input": "hi"}, {"output": "whats up"})
-    conversation_chain = ConversationalRetrievalChain.from_llm(
-        llm=llm,
-        retriever=vectorstore.as_retriever(),
-        memory=memory
-    )
-    return conversation_chain
-
-def handle_userinput(user_question):
-    response = conversation({'question': user_question})
-    chat_history = response['chat_history']
-
-
-
 def main():
     load_dotenv()
     user_question = "Wie lautet deine Frage?"
     folder_path = './PDFs'
     pdf_text = get_pdf_text(folder_path)
     text_chunks = get_text_chunks(pdf_text)
-
+    #conversation = get_conversation_chain(get_vectorstore())
+    retriever=get_vectorstore().as_retriever()
+    retrieved_docs=retriever.invoke(
+    "Was macht man im Katastrophenfall?"
+    )
+    print(retrieved_docs[0].page_content)
     #create_vectorstore_and_store(text_chunks)      # bei incoming pdf
 
     #vectorstore_DB=get_vectorstore()        # bei Abfrage durch Chatbot
-    print(get_vectorstore().similarity_search_with_score("stelle")) # zeigt vectorestore an
+    #print(get_vectorstore().similarity_search_with_score("stelle")) # zeigt an ob Vektordatenbank gefüllt ist
     
     #print(get_conversation_chain(get_vectorstore()))
 
