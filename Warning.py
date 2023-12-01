@@ -23,14 +23,14 @@ class Warning:
         
         return warnings
 
-# plz = Warning("Rottach-Egern")
+plz = Warning("Rottach-Egern")
 # plz2 = plz.compare()
 
 # plz2 = plz2.iloc[0]['name']
 # print(plz2)
 
-# data = plz.cleanWarnings()
-# print(data)
+data = plz.cleanWarnings()
+print(data)
 
 # gesuchte_zeile = data.loc[data['Plz'] == plz2]
 
