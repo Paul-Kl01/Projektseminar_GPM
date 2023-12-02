@@ -9,11 +9,11 @@ class ApiCall:
     def getData(self):
         ## Api Variablen für NINA
         api_variablen = {
-            #"hochwasser": "/lhp/mapData",
-            #"polizei": "/police/mapData",
-            "wetter": "/dwd/mapData"
-           # "katwarn": "/katwarn/mapData",
-            #"mowas": "/mowas/mapData"
+            "hochwasser": "/lhp/mapData",
+            "polizei": "/police/mapData",
+            "wetter": "/dwd/mapData",
+            "katwarn": "/katwarn/mapData",
+            "mowas": "/mowas/mapData"
         }
 
         # Dataframe Collumns definieren  
@@ -69,6 +69,12 @@ class ApiCall:
         def berechnung_func(row):
             loca = row['Area']
             ort = loca.replace("Gemeinde", "")
+            ort = loca.replace("Stadt", "")
+            ort = loca.replace("Mitgliedsgemeinde in Verwaltungsgemeinschaft", "")
+            
+            ###### TODO #####
+            # Orte klein schreiben und filtern nach und ... # 
+            ###### TODO #####
             location = Location(ort.strip()).getPostalCode()
             plz = location.iloc[0]['name']
             
@@ -83,7 +89,7 @@ class ApiCall:
         return df2
 
 # Testing    
-#l1 = ApiCall().getData()
+# l1 = ApiCall().getData()
 
 
 
