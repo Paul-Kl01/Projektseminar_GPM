@@ -2,7 +2,6 @@ import pandas as pd
 from ApiCall import *
 from Location import * 
 import numpy as np
-import math
 
 class Warning: 
     def __init__(self):
