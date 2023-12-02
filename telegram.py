@@ -48,13 +48,6 @@ class Telegram:
         async def handle_button_click(call):
             match call.data:
                 case "allg":
-                    # Hier wird die Funktion aufgerufen, die du mit Button 1 verknüpfen möchtest
-                    print("Call: ") 
-                    print(call)
-                    print("Data: ") 
-                    print(call.data)
-                    print("MSg: ") 
-                    print(call.message)
                     await self.function_allg(call.message)
                 case "akt_Meldung":
                     # Hier wird die Funktion aufgerufen, die du mit Button 1 verknüpfen möchtest
@@ -70,92 +63,36 @@ class Telegram:
             match self.last_message:
                 case "Okay, um welche Region handelt es sich?":
                 # Pauls APi abruf
-                    print(message.text)
                     ort = message.text
-                    print(ort)
                     antwort = self.gesuchte_zeile.getWarningOrt(ort)
                     
                     if antwort == "Keine Warnung gefunden":
-                        self.last_message = "Zu diesem Ort haben wir keine Meldungen. Probiere es mit einem anderen. Oder tippe \start um etwas anderes zu fragen."
-                        await self.bot.send_message(message.chat.id, self.last_message)
-                    else:
-                        erw_ant = "Wir haben zu diesem Ort folgende Meldungen: \n" + antwort +  "\n Tippe \start um etwas anderes zu fragen."
-                        self.last_message = antwort
+                        erw_ant = "Zu diesem Ort haben wir keine Meldungen. Probiere es mit einem anderen. Oder tippe \start um etwas anderes zu fragen."
+                        self.last_message = "Okay, um welche Region handelt es sich?"
                         await self.bot.send_message(message.chat.id, erw_ant)
-                case "Zu diesem Ort haben wir keine Meldungen. Probiere es mit einem anderen. Oder tippe \start um etwas anderes zu fragen.":
-                    ort = message.text
-                    antwort = self.bot.gesuchte_zeile.getWarningOrt(ort)
-                    if antwort == "Keine Warnung gefunden":
-                        self.last_message = "Zu diesem Ort haben wir keine Meldungen. Probiere es mit einem anderen. Oder tippe \start um etwas anderes zu fragen."
-                        await self.bot.send_message(message.chat.id, self.last_message)
                     else:
-                        erw_ant = "Wir haben zu diesem Ort folgende Meldungen: \n" + antwort +  "\n Tippe \start um etwas anderes zu fragen."
-                        self.last_message = antwort
-                        await self.bot.send_message(message.chat.id, antwort)
+                        erw_ant = "Wir haben zu diesem Ort folgende Meldungen: \n" + antwort +  "\nSuche nach einem neuen ort oder tippe \start um etwas anderes zu fragen."
+                        self.last_message = "Okay, um welche Region handelt es sich?"
+                        await self.bot.send_message(message.chat.id, erw_ant)
+                case "Okay, es geht um allgemeine Informationen zum Katastrophenschutz. Stelle mir einfach eine Frage und ich gebe mein Bestes, um dir weiterzuhelfen!":
+                    ######zauberei einfügen#####
+                    self.last_message = "Okay, es geht um allgemeine Informationen zum Katastrophenschutz. Stelle mir einfach eine Frage und ich gebe mein Bestes, um dir weiterzuhelfen!"
+                    erw_ant = "🚨Zauberei soll kommen puff peng...konfetti!!!🚨"
+                    await self.bot.send_message(message.chat.id, erw_ant)        
                 case _:
-                    print(self.last_message)
-                    self.last_message = "Bitte nutze einen der Buttons. Im Notfall kannst du den Chat mit \start neustarten."
+                    self.last_message = "Bitte starte den Bot mit /start neu."
                     await self.bot.send_message(message.chat.id, self.last_message)
-
-            frage = message.text
-            
-            #await self.bot.reply_to(message, frage)
-            
         asyncio.run(self.bot.polling())
 
     async def function_allg(self, message):
-        # hier bitte den Zaubereipart einsenden
-        antwort = "Du möchtest allgemeine Informationen"
+        antwort = "Okay, es geht um allgemeine Informationen zum Katastrophenschutz. Stelle mir einfach eine Frage und ich gebe mein Bestes, um dir weiterzuhelfen!"
         self.last_message = antwort
         await self.bot.send_message(message.chat.id, antwort)
 
     async def function_akt_meldungen(self, message):
-        # hier bitte Pauls abfrage einfügen
         antwort = "Okay, um welche Region handelt es sich?"
         self.last_message = antwort
         await self.bot.send_message(message.chat.id, antwort)
 
-
 telegram = Telegram()
 telegram.start_polling()
-
-
-
-# # import telebot
-# # from telebot import types
-# import asyncio
-# from telebot.async_telebot import AsyncTeleBot
-
-# from Warning import *
-
-
-# #### Julian neu #####
-
-# with open("token.txt") as file:
-#     token = file.read()
-    
-# bot = AsyncTeleBot(token)
-
-# gesuchte_zeile = Warning()
-
-
-# # Handle '/start' and '/help'
-# @bot.message_handler(commands=['help', 'start'])
-# async def send_welcome(message):
-#     await bot.reply_to(message, """\
-#             Hi there, I am EchoBot.
-#             I am here to echo your kind words back to you. Just say anything nice and I'll say the exact same thing to you!\
-#             """)
-
-# @bot.message_handler(func=lambda message: True)
-# async def get_Message(message):
-#     frage = message.text
-#     print(frage)
-    
-#     # Warnung für genannten Ort abfragen 
-#     antw = gesuchte_zeile.getWarningOrt(frage)
-    
-#     # Bot Repy mit Warnung 
-#     await bot.reply_to(message, antw)
-
-# asyncio.run(bot.polling())
