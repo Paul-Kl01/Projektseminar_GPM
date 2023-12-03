@@ -23,9 +23,9 @@ class Telegram:
     
     async def send_status_message(self, message):
         status_message = (
-        "Hallo! Willkommen beim KatHelferPro Chatbot! Ich bin Rene. Hier gibt es Informationen zum Zivil- und Katastrophenschutz in Deutschland. Beachte bitte, dass ich Fehler machen kann. Prüfe daher Wichtiges nochmal nach."
-            " Frag mich nach allgemeinen Informationen zum Katastrophenschutz, Tipps zur Vorsorge, Verhalten bei verschiedenen Katastrophen und wie du dich (auch) langfristig bei verschiedenen Organisationen engagieren kannst. Aktuelle Pegelstände der Gewässer stehen ebenfalls zur Verfügung."
-            " Sicherheit geht vor! 🚨"
+        "Hallo! Willkommen beim KatHelferPro Chatbot! Ich bin Rene. Hier gibt es Informationen zum Zivil- und Katastrophenschutz in Deutschland. Beachte bitte, dass ich Fehler machen kann. Prüfe daher Wichtiges nochmal nach. \n"
+            " Frag mich nach allgemeinen Informationen zum Katastrophenschutz, Tipps zur Vorsorge, Verhalten bei verschiedenen Katastrophen und wie du dich (auch) langfristig bei verschiedenen Organisationen engagieren kannst. Aktuelle Meldungen stehen ebenfalls zur Verfügung. \n"
+            " Sicherheit geht vor! 🚨 \n"
 
             "                                                                        Impressum Platzhalter"
         )
@@ -97,7 +97,7 @@ class Telegram:
         await self.bot.send_message(message.chat.id, antwort)
 
     async def function_akt_meldungen(self, message):
-        antwort = "Okay, um welche Region handelt es sich?"
+        antwort = "Okay, um welche Ort handelt es sich?"
         self.last_message = antwort
         await self.bot.send_message(message.chat.id, antwort)
 
