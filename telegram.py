@@ -68,18 +68,18 @@ class Telegram:
         @self.bot.message_handler(func=lambda message: True)
         async def get_Message(message):
             match self.last_message:
-                case "Okay, um welche Region handelt es sich?":
+                case "Okay, um welchen Ort handelt es sich?":
                 # Pauls APi abruf
                     ort = message.text
                     antwort = self.gesuchte_zeile.getWarningOrt(ort)
                     
                     if antwort == "Keine Warnung gefunden":
                         erw_ant = "Zu diesem Ort haben wir keine Meldungen. Probiere es mit einem anderen. Oder tippe /start um etwas anderes zu fragen."
-                        self.last_message = "Okay, um welche Region handelt es sich?"
+                        self.last_message = "Okay, um welchen Ort handelt es sich?"
                         await self.bot.send_message(message.chat.id, erw_ant)
                     else:
                         erw_ant = "Wir haben zu diesem Ort folgende Meldungen: \n" + antwort +  "\nSuche nach einem neuen ort oder tippe /start um etwas anderes zu fragen."
-                        self.last_message = "Okay, um welche Region handelt es sich?"
+                        self.last_message = "Okay, um welchen Ort handelt es sich?"
                         await self.bot.send_message(message.chat.id, erw_ant)
                 case "Okay, es geht um allgemeine Informationen zum Katastrophenschutz. Stelle mir einfach eine Frage und ich gebe mein Bestes, um dir weiterzuhelfen!":
                     ######zauberei einfügen#####
@@ -97,7 +97,7 @@ class Telegram:
         await self.bot.send_message(message.chat.id, antwort)
 
     async def function_akt_meldungen(self, message):
-        antwort = "Okay, um welche Ort handelt es sich?"
+        antwort = "Okay, um welchen Ort handelt es sich?"
         self.last_message = antwort
         await self.bot.send_message(message.chat.id, antwort)
 
