@@ -3,12 +3,19 @@ from telebot import types
 import asyncio
 from telebot.async_telebot import AsyncTeleBot
 from Warning import *
+import os 
 
 class Telegram: 
     def __init__(self):
         self.last_message = ""
         self.gesuchte_zeile = Warning()    
+        
+        # Token laden über private Variable in Hugging face
+        #  der Token muss über die Settings als System-Variable eingebunden werden und entsprechend benannt werden 
+        # self.bot = AsyncTeleBot(os.environ['BotToken'])
+        #  print("Telegram-Bot geladen")
 
+        #Token laden über token.txt
         with open("token.txt") as file:
             token = file.read()
     
@@ -67,11 +74,11 @@ class Telegram:
                     antwort = self.gesuchte_zeile.getWarningOrt(ort)
                     
                     if antwort == "Keine Warnung gefunden":
-                        erw_ant = "Zu diesem Ort haben wir keine Meldungen. Probiere es mit einem anderen. Oder tippe \start um etwas anderes zu fragen."
+                        erw_ant = "Zu diesem Ort haben wir keine Meldungen. Probiere es mit einem anderen. Oder tippe /start um etwas anderes zu fragen."
                         self.last_message = "Okay, um welche Region handelt es sich?"
                         await self.bot.send_message(message.chat.id, erw_ant)
                     else:
-                        erw_ant = "Wir haben zu diesem Ort folgende Meldungen: \n" + antwort +  "\nSuche nach einem neuen ort oder tippe \start um etwas anderes zu fragen."
+                        erw_ant = "Wir haben zu diesem Ort folgende Meldungen: \n" + antwort +  "\nSuche nach einem neuen ort oder tippe /start um etwas anderes zu fragen."
                         self.last_message = "Okay, um welche Region handelt es sich?"
                         await self.bot.send_message(message.chat.id, erw_ant)
                 case "Okay, es geht um allgemeine Informationen zum Katastrophenschutz. Stelle mir einfach eine Frage und ich gebe mein Bestes, um dir weiterzuhelfen!":
