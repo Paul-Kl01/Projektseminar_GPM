@@ -52,7 +52,7 @@ class Warning:
         
         if gesuchte_zeile.empty:
             print("fehler")
-            fehler = "Es gibt keine Warnung"
+            fehler = "Keine Warnung gefunden"
             return fehler
         else:
             wert_als_string = gesuchte_zeile.iloc[0]
