@@ -1,33 +1,30 @@
+## Imports ## 
 import pandas as pd
 from ApiCall import *
 from Location import * 
 import numpy as np
 
+## Return: String
 class Warning: 
     def __init__(self):
-        # Ort aus Bot Anfrage 
-        #self.ort = ort
-        # Warnings DataFrame
         warnings = ApiCall.getData(self)
         warnings.replace('', np.nan, inplace=True)
         warnings = warnings[warnings['Plz'].notna()]
         warnings.to_csv('api.csv', index=True)  
-        
+    
+    # Postleitzahl abfragen 
     def getPlz(self, ort):
-        # Plz von Chat auslesen
         plzChat = Location(ort).getPostalCode()
-        #print(plzChat)
         return plzChat
     
+    # Warnings ohne Plz aus Dataframe entfernen
     def cleanWarnings(self):
-        # Gibt Warnings die Plz haben aus 
         self.warnings.replace('', np.nan, inplace=True)
         warnings = self.warnings[self.warnings['Plz'].notna()]
-        
         return warnings
     
+    # Orte in Warnungen suchen
     def getWarningOrt(self, ort):
-        # Plz aus Ort von Nutzer
         plz2 = self.getPlz(ort)
         plz2 = plz2.iloc[0]['name']
         
@@ -50,6 +47,7 @@ class Warning:
         print(gesuchte_zeile)
         print("zeile")
         
+        # Warnung ausgeben
         if gesuchte_zeile.empty:
             print("fehler")
             fehler = "Keine Warnung gefunden"

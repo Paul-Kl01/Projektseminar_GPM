@@ -1,26 +1,29 @@
-# import telebot
+## Imports ## 
 from telebot import types
 import asyncio
 from telebot.async_telebot import AsyncTeleBot
 from Warning import *
 import os 
 
+## Return: none
 class Telegram: 
     def __init__(self):
         self.last_message = ""
         self.gesuchte_zeile = Warning()    
         
         # Token laden über private Variable in Hugging face
-        #  der Token muss über die Settings als System-Variable eingebunden werden und entsprechend benannt werden 
+        # Der Token muss über die Settings als System-Variable eingebunden werden und entsprechend benannt werden 
         # self.bot = AsyncTeleBot(os.environ['BotToken'])
-        #  print("Telegram-Bot geladen")
+        # print("Telegram-Bot geladen")
 
         #Token laden über token.txt
         with open("token.txt") as file:
             token = file.read()
-    
+
+        # Bot initialisieren
         self.bot = AsyncTeleBot(token)
     
+    # Startnachricht senden
     async def send_status_message(self, message):
         status_message = (
         "Hallo! Willkommen beim KatHelferPro Chatbot! Ich bin Rene. Hier gibt es Informationen zum Zivil- und Katastrophenschutz in Deutschland. Beachte bitte, dass ich Fehler machen kann. Prüfe daher Wichtiges nochmal nach. \n"
@@ -38,7 +41,8 @@ class Telegram:
 
         last_message = status_message
         await self.bot.reply_to(message, text=status_message, reply_markup=keyboard)
-        
+    
+    # Message Handler     
     def start_polling(self):
         @self.bot.message_handler(commands=['start'])
         async def send_welcome(message):
@@ -69,7 +73,7 @@ class Telegram:
         async def get_Message(message):
             match self.last_message:
                 case "Okay, um welchen Ort handelt es sich?":
-                # Pauls APi abruf
+                    # API Warnungen zu Ort abfragen s
                     ort = message.text
                     antwort = self.gesuchte_zeile.getWarningOrt(ort)
                     
@@ -82,7 +86,7 @@ class Telegram:
                         self.last_message = "Okay, um welchen Ort handelt es sich?"
                         await self.bot.send_message(message.chat.id, erw_ant)
                 case "Okay, es geht um allgemeine Informationen zum Katastrophenschutz. Stelle mir einfach eine Frage und ich gebe mein Bestes, um dir weiterzuhelfen!":
-                    ######zauberei einfügen#####
+                    # Funktionalität LLM 
                     self.last_message = "Okay, es geht um allgemeine Informationen zum Katastrophenschutz. Stelle mir einfach eine Frage und ich gebe mein Bestes, um dir weiterzuhelfen!"
                     erw_ant = "🚨Zauberei soll kommen puff peng...konfetti!!!🚨"
                     await self.bot.send_message(message.chat.id, erw_ant)        
@@ -91,6 +95,7 @@ class Telegram:
                     await self.bot.send_message(message.chat.id, self.last_message)
         asyncio.run(self.bot.polling())
 
+    # Funktionalität Buttons 
     async def function_allg(self, message):
         antwort = "Okay, es geht um allgemeine Informationen zum Katastrophenschutz. Stelle mir einfach eine Frage und ich gebe mein Bestes, um dir weiterzuhelfen!"
         self.last_message = antwort
@@ -101,5 +106,6 @@ class Telegram:
         self.last_message = antwort
         await self.bot.send_message(message.chat.id, antwort)
 
+# Bot starten 
 telegram = Telegram()
 telegram.start_polling()
