@@ -5,9 +5,11 @@ from datetime import datetime
 from datetime import timezone
 from Location import *
 
+## Return: Dataframe 
 class ApiCall: 
     def getData(self):
-        ## Api Variablen für NINA
+        
+        # Api Variablen für NINA
         api_variablen = {
             "hochwasser": "/lhp/mapData",
             "polizei": "/police/mapData",
@@ -33,6 +35,7 @@ class ApiCall:
             n = 0
             response = get_api_warning(warning)
             df = pd.DataFrame(columns=columns)
+            
             # GetDetails for warning 
             for responses in response:
                 id = responses["id"]
@@ -49,14 +52,14 @@ class ApiCall:
                 n = n+1
             return df
 
-        ## Dataframe to CSV 
+        # Dataframe to CSV 
         def df_to_csv(data, filename): 
             data.to_csv(filename+'.csv') 
         
         # Dataframe definieren    
         data = pd.DataFrame(columns=columns) 
 
-        ## API abfragen für alle NINA Variablen/Warnings ##
+        # API abfragen für alle NINA Variablen/Warnings 
         for x in api_variablen:
             data_api = get_api_details(api_variablen[x])
             data = pd.concat([data, data_api])
@@ -68,18 +71,21 @@ class ApiCall:
         # Neue Zeile mit Plz erstellen
         def berechnung_func(row):
             loca = row['Area']
-            ort = loca.replace("Gemeinde", "")
-            ort = loca.replace("Stadt", "")
-            ort = loca.replace("Mitgliedsgemeinde in Verwaltungsgemeinschaft", "")
             
-            ###### TODO #####
-            # Orte klein schreiben und filtern nach und ... # 
-            ###### TODO #####
+            # Bereinigung der Orte 
+            ort = loca.replace("Gemeinde ", "")           
+            ort = ort.replace("Stadt ", "")
+            ort = ort.replace("Mitgliedsgemeinde in Verwaltungsgemeinschaft ", "")
+            ort = ort.replace("Landkreis ", "")
+            ort = ort.replace("Stadtgebiet ", "")
+
+            # Postleitzahl für Ort bestimmen
             location = Location(ort.strip()).getPostalCode()
             plz = location.iloc[0]['name']
-            
+                        
             return plz
 
+        # Zeile mit Postleitzahl einfügen
         df2['Plz'] = df2.apply(berechnung_func, axis=1)
         
         # API Daten in CSV speichern 

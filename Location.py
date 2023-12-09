@@ -1,14 +1,18 @@
+## Imports ##
 from functools import partial
 from geopy.geocoders import Nominatim # Openstreatmaps 
 import requests
 import json
 import pandas as pd 
 
+## Return: Dataframe 
 class Location: 
+    # Input: Location resp. Ort, zu welchem die Plz bestimmt werden soll
     def __init__(self, location): 
         self.location = location
         self.df = self.jsonToDf()
-        
+    
+    # JSON in Dataframe speichern    
     def jsonToDf(self):
         plz = pd.read_json('plz.json')
         plz["plz_name"] = plz['plz_name'].str.replace('\u00f6','Ö')
@@ -22,9 +26,9 @@ class Location:
         
         mask = plz['plz_name'] == "Halle"
         plz.loc[mask, 'plz_name'] = "Halle (Weserbergland)"
-        
         return plz
-        
+    
+    # API Abfrage für Postleitzahlen     
     def getPostalJson(self):
         # Postleitzahlen per API erzahlten 
         url = 'https://public.opendatasoft.com/api/explore/v2.1/catalog/datasets/georef-germany-postleitzahl/exports/json?select=plz_name%2C%20name&lang=de&timezone=UTC&use_labels=false&epsg=4326'  # Ersetze dies durch die tatsächliche API-URL
@@ -44,7 +48,7 @@ class Location:
         else:
             print('Fehler bei der API-Anfrage.')
     
-    ## return Postleitzahl
+    # Postleitzahl abfragen (in Bibliothek oder JSON Data suchen)
     def getPostalCode(self):
         try: 
             geolocator = Nominatim(user_agent="LocationApiPruefen")
@@ -71,12 +75,8 @@ class Location:
                 
                 if ergebnisse.empty:
                    neue_zeile = pd.Series({'plz_name': "", 'name': ''})
-                   #ergebnisse = ergebnisse.append(neue_zeile, ignore_index=True)
                    ergebnisse = pd.concat([neue_zeile, ergebnisse], ignore_index=True)
-                   #ergebnisse = ergebnisse.drop(1)
-                   #print(ergebnisse)
                    return ergebnisse 
-            #print(ergebnisse)
             return ergebnisse
             
 
