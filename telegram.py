@@ -6,6 +6,8 @@ from backend.Warning import *
 from backend.llm import get_llm_answer
 import os
 
+
+
 # Return none
 class Telegram: 
     def __init__(self):
@@ -15,14 +17,15 @@ class Telegram:
         # Token laden über private Variable in Hugging face
         # Der Token muss über die Settings als System-Variable eingebunden werden und entsprechend benannt werden 
         
-        # self.bot = AsyncTeleBot(os.environ['Rene_Telegram_Token'])
-        # print("Telegram-Bot geladen")
+        self.bot = AsyncTeleBot(os.environ['Rene_Telegram_Token'])
+        print("Telegram-Bot geladen")
 
 
         # Alternativ könnte man auch eine token.txt mit dem Token ablegen
-        with open("token.txt") as file:
-            token = file.read()
-    
+        #with open("token.txt") as file:
+        #    token = file.read()
+
+        
         #aktivieren des Bots
         self.start_polling()
 
@@ -46,7 +49,7 @@ class Telegram:
         await self.bot.reply_to(message, text=status_message, reply_markup=keyboard)
 
     # Message Handler
-    def start_polling(self):
+    def start_polling(self, non_stop: bool=False, skip_pending=False, interval: int=0, timeout: int=20,request_timeout: int=None):
         # handeln des /start Befehls
         @self.bot.message_handler(commands=['start'])
         async def send_welcome(message):
@@ -119,3 +122,5 @@ class Telegram:
         antwort = "Okay, um welchen Ort handelt es sich?"
         self.last_message = antwort
         await self.bot.send_message(message.chat.id, antwort)
+
+

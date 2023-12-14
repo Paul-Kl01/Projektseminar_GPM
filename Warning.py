@@ -1,7 +1,7 @@
 ## Imports ## 
 import pandas as pd
-from ApiCall import *
-from Location import * 
+from backend.ApiCall import *
+from backend.Location import * 
 import numpy as np
 
 ## Return: String

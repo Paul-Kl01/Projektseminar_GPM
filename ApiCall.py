@@ -3,7 +3,7 @@ import requests
 import pandas as pd
 from datetime import datetime
 from datetime import timezone
-from Location import *
+from backend.Location import *
 
 ## Return: Dataframe 
 class ApiCall: 
